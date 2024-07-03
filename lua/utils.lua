@@ -27,4 +27,31 @@ end
 local function plugin_keys(lhs, rhs, opts_3f)
   return merge({lhs, rhs}, (opts_3f or {}))
 end
-return {merge = merge, keys = keys, plugin = plugin, ["plugin-keys"] = plugin_keys, ["setup-plugin"] = setup_plugin}
+local function serialize(v)
+  local serialize_tbl
+  local function _2_(t)
+    local res = "TABLE"
+    for k, v0 in pairs(t) do
+      res = (res .. "\n\9" .. k .. " -> " .. serialize(v0))
+    end
+    return res
+  end
+  serialize_tbl = _2_
+  if (type(v) == "table") then
+    return serialize_tbl(v)
+  else
+    return tostring(v)
+  end
+end
+local function notify(...)
+  local text
+  do
+    local res = ""
+    for _, v in ipairs({...}) do
+      res = (res .. " " .. serialize(v))
+    end
+    text = res
+  end
+  return vim.notify(text)
+end
+return {notify = notify, merge = merge, keys = keys, plugin = plugin, ["plugin-keys"] = plugin_keys, ["setup-plugin"] = setup_plugin}

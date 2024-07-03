@@ -13,7 +13,7 @@ local function _2_(state)
   local path = node:get_id()
   return vim.fn.setreg("+", path, "c")
 end
-window_opts = {mappings = {[{"l"}] = "open", [{"h"}] = "close_node", [{"<space>"}] = "none", [{"Y"}] = {_2_, desc = "Copy path to clipboard"}, [{"P"}] = {"toggle_preview", config = {use_float = false}}}}
+window_opts = {mappings = {l = "open", h = "close_node", ["<space>"] = "none", Y = {_2_, desc = "Copy path to clipboard"}, P = {"toggle_preview", config = {use_float = false}}}}
 local function _3_()
   return command({toggle = true, dir = vim.uv.cwd()})
 end

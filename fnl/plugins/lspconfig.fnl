@@ -1,4 +1,4 @@
-(local {: plugin : setup-plugin : keys} (require :utils))
+(local {: plugin : setup-plugin : keys : notify} (require :utils))
 (local {: map } (require :keymap))
 
 (fn bmap [buffer keys func desc]
@@ -51,7 +51,12 @@
                                                         :buffer e.buf}))
                         event.buf)
         )
-    ))
+    )))
+
+(fn config []
+  (vim.api.nvim_create_autocmd :LspAttach 
+    {:group (vim.api.nvim_create_augroup :lsp-attach {:clear true})
+     :callback on-attach})
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)
         cmp (require :cmp_nvim_lsp)
         capabilities (vim.tbl_deep_extend :force capabilities (cmp.default_capabilities))
@@ -64,7 +69,9 @@
                 }
               }
             }
-          }}
+          }
+          :ruff {}
+          }
         mason (require :mason)
         _ (mason.setup)
         ensure_installed (keys (or servers {}))
@@ -83,12 +90,6 @@
                           lspconfig (require :lspconfig)
                           lspserver (. lspconfig server-name)]
                       (lspserver.setup server)))]}))
-  )
-
-(fn config []
-  (vim.api.nvim_create_autocmd :LspAttach 
-    {:group (vim.api.nvim_create_augroup :lsp-attach {:clear true})
-     :callback on-attach})
   )
 
 

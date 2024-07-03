@@ -6,15 +6,15 @@
     (cmd.execute opts)))
 
 (local window-opts
- {:mappings {[:l] :open
-             [:h] :close_node
-             [:<space>] :none
-             [:Y] {1 (fn [state]
+ {:mappings {:l :open
+             :h :close_node
+             :<space> :none
+             :Y {1 (fn [state]
                        (let [node (state.tree:get_node)
                              path (node:get_id)]
                          (vim.fn.setreg :+ path :c)))
                    :desc "Copy path to clipboard"}
-             [:P] {1 :toggle_preview
+             :P {1 :toggle_preview
                    :config {:use_float false}}}})
 
 (plugin "nvim-neo-tree/neo-tree.nvim"

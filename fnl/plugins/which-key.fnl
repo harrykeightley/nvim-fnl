@@ -1,23 +1,21 @@
-(local {: plugin } (require :utils))
+(local {: plugin : notify } (require :utils))
 
-(fn config []
-  (let [wk (require :which-key)
-        ;; Existing key-chains
-        keys {
-        :c "[C]ode"
-        :d "[D]iagnostics"
-        :r "[R]ename"
-        :s "[S]earch"
-        :t "[T]oggle"
-        :h "Git [H]unk"
-        }]
+(fn config [...]
+  (let [wk (require :which-key)]
     (wk.setup)
-    (wk.register (collect [key name (pairs keys)]
-                   (values [(.. :<leader> key)] 
-                           {: name 
-                            _ :which-key-ignore})))
-    ;; Visual mode
-    (wk.register {[:<leader>h] ["Git [H]unk"]} {:mode :v})))
+    (wk.register 
+      {
+        :c {:name "[C]ode+"}
+        :d {:name "[D]iagnostics+"}
+        :r {:name "[R]ename+"}
+        :s {:name "[S]earch+"}
+        :t {:name "[T]oggle+"}
+        :h {:name  "Git [H]unk+"}
+      }
+      {:prefix :<leader>})
+    ; Visual mode
+    (wk.register {:<leader>h ["Git [H]unk"]} {:mode :v})
+  ))
 
 (plugin :folke/which-key.nvim
         {:event :VimEnter
