@@ -14,4 +14,7 @@ map("n", "<C-l>", "<C-w>l", {desc = "Go to Right Window", remap = true})
 map("n", "<S-h>", "<cmd>bprevious<cr>", {desc = "Prev Buffer"})
 map("n", "<S-l>", "<cmd>bnext<cr>", {desc = "Next Buffer"})
 map({"i", "n"}, "<esc>", "<cmd>noh<cr><esc>", {desc = "Escape and Clear hlsearch"})
+map("n", "<leader>dk", vim.diagnostic.goto_prev, {desc = "[D]iagnostics previous"})
+map("n", "<leader>dj", vim.diagnostic.goto_next, {desc = "[D]iagnostics next"})
+map("n", "<leader>dl", vim.diagnostic.open_float, {desc = "[D]iagnostics line"})
 return {}

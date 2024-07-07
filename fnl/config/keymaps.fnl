@@ -22,4 +22,10 @@
 ;; Clear search with <esc>
 (map [:i :n] :<esc> :<cmd>noh<cr><esc> { :desc "Escape and Clear hlsearch" })
 
+
+;; Diagnostics
+(map :n :<leader>dk vim.diagnostic.goto_prev  { :desc "[D]iagnostics previous" })
+(map :n :<leader>dj vim.diagnostic.goto_next  { :desc "[D]iagnostics next" })
+(map :n :<leader>dl vim.diagnostic.open_float  { :desc "[D]iagnostics line" })
+
 {}

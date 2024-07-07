@@ -18,4 +18,6 @@
                 ;                   :lsp_fallback (should-save? (. vim.bo bufnr :filetype))})
                 :formatters_by_ft {:lua [:stylua]
                                    :fennel [:fnlfmt]
-                                   :python [:ruff_format]}}})
+                                   :python [:ruff_format]}
+                :javascript [:prettierd :prettier]
+                :typescriptreact [:prettierd]}})

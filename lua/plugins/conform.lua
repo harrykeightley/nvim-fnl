@@ -19,4 +19,4 @@ local function _5_()
   local conform = require("conform")
   return conform.format({async = true, lsp_fallback = true})
 end
-return plugin("stevearc/conform.nvim", {keys = {plugin_keys("<leader>f", _5_, {mode = "", desc = "[F]ormat buffer"})}, opts = {formatters_by_ft = {lua = {"stylua"}, fennel = {"fnlfmt"}, python = {"ruff_format"}}, notify_on_error = false}, lazy = false})
+return plugin("stevearc/conform.nvim", {keys = {plugin_keys("<leader>f", _5_, {mode = "", desc = "[F]ormat buffer"})}, opts = {formatters_by_ft = {lua = {"stylua"}, fennel = {"fnlfmt"}, python = {"ruff_format"}}, javascript = {"prettierd", "prettier"}, typescriptreact = {"prettierd"}, notify_on_error = false}, lazy = false})
