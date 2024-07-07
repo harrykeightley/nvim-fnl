@@ -1,5 +1,41 @@
-(local {: plugin : setup-plugin : keys : notify} (require :utils))
+(local {: plugin : setup-plugin : keys : merge} (require :utils))
 (local {: map } (require :keymap))
+
+(local server-settings 
+			 {
+          :lua_ls {
+            :settings {
+              :Lua {
+                :completion {
+                  :callSnippet :Replace
+                }
+              }
+            }
+          }
+          :ruff {}
+					:pyright {
+						:settings {
+							:pyright {
+								:disableOrganizeImports true ;using ruff
+							}
+							:python {
+								:analysis {
+									:ignore ["*"] ; Using Ruff
+									:typeCheckingMode :off ; -- Using Ruff
+									:reportUndefinedVariable "none"
+								}
+							}
+						}
+					}
+          :tsserver {}
+          :tailwindcss {}
+          :fennel_language_server {}
+        })
+
+(local group-names 
+			 {:attach :hjk-attach
+			  :detach :hjk-detach
+			  :highlight :hjk-highlight})
 
 (fn bmap [buffer keys func desc]
   (map :n keys func {:desc (.. "LSP: " desc)
@@ -7,6 +43,12 @@
 
 (fn tsb [name]
   (. (require :telescope.builtin) name))
+
+(fn augroup [name ?opts]
+	(vim.api.nvim_create_augroup name (merge {:clear false} (or ?opts {}))))
+
+(fn autocmd [events ?opts]
+	(vim.api.nvim_create_autocmd events (or ?opts {})))
 
 (fn on-attach [event]
   ;; LSP BINDINGS
@@ -29,51 +71,32 @@
     ;
     ; When you move your cursor, the highlights will be cleared (the second autocommand).
     (when can-highlight?
-      (let [highlight-augroup (vim.api.nvim_create_augroup :lsp-highlight {:clear false})
-            create-autocmd (fn [events group callback buffer?]
-                             (vim.api.nvim_create_autocmd events 
-                                                          {: group 
-                                                           : callback 
-                                                           :buffer buffer?}))]
-        (create-autocmd [:CursorHold :CursorHoldI] 
-                        highlight-augroup 
-                        vim.lsp.buf.document_highlight
-                        event.buf)
-        (create-autocmd [:CursorMoved :CursorMovedI] 
-                        highlight-augroup 
-                        vim.lsp.buf.clear_references
-                        event.buf)
-        (create-autocmd :LspDetach
-                        (vim.api.nvim_create_augroup :lsp-detatch {:clear true}) 
-                        (fn [e] 
-                          (vim.lsp.buf.clear_references)
-                          (vim.api.nvim_clear_autocmds {:group :lsp-highlight
-                                                        :buffer e.buf}))
-                        event.buf)
-        )
-    )))
+      (let [highlight-augroup (augroup (. group-names :highlight))]
+        (autocmd [:CursorHold :CursorHoldI] 
+								 {:buffer event.buf 
+								  :group highlight-augroup
+									:callback vim.lsp.buf.document_highlight})
+        (autocmd [:CursorMoved :CursorMovedI] 
+								 {:buffer event.buf 
+								  :group highlight-augroup
+									:callback vim.lsp.buf.clear_references})
+        (autocmd :LspDetach
+								 {:group (augroup (. group-names :detach))
+									:callback (fn [other-event] 
+															(vim.lsp.buf.clear_references)
+															(vim.api.nvim_clear_autocmds {:group (. group-names :highlight)
+																														:buffer other-event.buf}))})))))
 
-(fn config []
-  (vim.api.nvim_create_autocmd :LspAttach 
-    {:group (vim.api.nvim_create_augroup :lsp-attach {:clear true})
-     :callback on-attach})
-  (let [capabilities (vim.lsp.protocol.make_client_capabilities)
+(fn setup-capabilities []
+	(let [capabilities (vim.lsp.protocol.make_client_capabilities)
         cmp (require :cmp_nvim_lsp)
         capabilities (vim.tbl_deep_extend :force capabilities (cmp.default_capabilities))
-        servers {
-          :lua_ls {
-            :settings {
-              :Lua {
-                :completion {
-                  :callSnippet :Replace
-                }
-              }
-            }
-          }
-          :ruff {}
-          }
+				;; Require mason to be setup
         mason (require :mason)
         _ (mason.setup)
+        servers server-settings
+				;; You can add other tools here that you want Mason to install
+				;; for you, so that they are available from within Neovim.
         ensure_installed (keys (or servers {}))
         tool-installer (require :mason-tool-installer)
         mason-lspconfig (require :mason-lspconfig)]
@@ -81,7 +104,7 @@
     (tool-installer.setup {: ensure_installed})
     (mason-lspconfig.setup 
       {:handlers [(fn [server-name]
-                    (let [server (or (. servers server-name) {})
+                    (let [server (or (?. servers server-name) {})
                           server-capabilities (vim.tbl_deep_extend 
                                                 :force 
                                                 {} 
@@ -89,8 +112,15 @@
                                                 (or server.capabilities {}))
                           lspconfig (require :lspconfig)
                           lspserver (. lspconfig server-name)]
+											(set server.capabilities server-capabilities)
                       (lspserver.setup server)))]}))
-  )
+	)
+
+(fn config []
+  (autocmd :LspAttach 
+					 {:group (augroup (. group-names :attach))
+						:callback on-attach})
+  (setup-capabilities))
 
 
 (plugin :neovim/nvim-lspconfig

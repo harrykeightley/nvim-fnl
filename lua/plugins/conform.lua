@@ -17,9 +17,6 @@ local function should_save_3f(filetype)
 end
 local function _5_()
   local conform = require("conform")
-  return conform.format({async = true, lsp_fallback = true, mode = "", desc = "[F]ormat buffer"})
+  return conform.format({async = true, lsp_fallback = true})
 end
-local function _6_(bufnr)
-  return {timeout_ms = 500, lsp_fallback = should_save_3f(vim.bo[bufnr].filetype)}
-end
-return plugin("stevearc/conform.nvim", {keys = {plugin_keys("<leader>f", _5_)}, opts = {format_on_save = _6_, formatters_by_ft = {lua = {"stylua"}}, notify_on_error = false}, lazy = false})
+return plugin("stevearc/conform.nvim", {keys = {plugin_keys("<leader>f", _5_, {mode = "", desc = "[F]ormat buffer"})}, opts = {formatters_by_ft = {lua = {"stylua"}, fennel = {"fnlfmt"}, python = {"ruff_format"}}, notify_on_error = false}, lazy = false})

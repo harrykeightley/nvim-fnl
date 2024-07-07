@@ -10,5 +10,4 @@
     (set statusline.section_location (fn [] "%2l:%-2v")))
   )
 
-(plugin :echasnovski/mini.nvim
-  {: config})
+(plugin :echasnovski/mini.nvim {: config})

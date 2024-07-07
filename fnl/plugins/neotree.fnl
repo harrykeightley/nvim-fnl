@@ -5,6 +5,21 @@
   (let [cmd (require :neo-tree.command)]
     (cmd.execute opts)))
 
+(fn init []
+  (vim.api.nvim_create_autocmd "BufEnter"
+    {:group (vim.api.nvim_create_augroup "neotree-start-directory" {:clear true})
+     :desc "Start Neotree with a directory"
+     :once true
+     :callback (fn []
+                 (when (not (. package.loaded "neo-tree"))
+                    (let [stats (vim.uv.fs_stat (vim.fn.argv 0))
+                          is-dir? (and stats (= stats.type :directory))]
+                      (when is-dir? 
+                        (require :neo-tree)))))
+
+     })
+  )
+
 (local window-opts
  {:mappings {:l :open
              :h :close_node
@@ -29,9 +44,21 @@
 
    :deactivate #(vim.cmd "Neotree close") 
 
+   : init
+
    :opts {:sources [:filesystem :buffers :git_status]
           :open_files_do_not_replace_types [:terminal :Trouble :trouble :qf :Outline]
           :window window-opts
+          :filesystem {:bind_to_cwd false
+                       :follow_current_file {:enabled true}
+                       :use_libuv_file_watcher true
+                       :filtered_items {
+                          :visible true
+                          :show_hidden_count true
+                          :hide_dotfiles false
+                          :hide_gitignored true
+                          :hide_by_name [".DS_Store"]}
+                       }
     
     
    }})

@@ -4,6 +4,7 @@
   [:bash 
   :fish
   :vim
+  :vimdoc
   :clojure 
   :commonlisp 
   :dockerfile 

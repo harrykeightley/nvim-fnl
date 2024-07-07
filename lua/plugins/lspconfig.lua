@@ -3,14 +3,22 @@ local _local_1_ = require("utils")
 local plugin = _local_1_["plugin"]
 local setup_plugin = _local_1_["setup-plugin"]
 local keys = _local_1_["keys"]
-local notify = _local_1_["notify"]
+local merge = _local_1_["merge"]
 local _local_2_ = require("keymap")
 local map = _local_2_["map"]
+local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, pyright = {settings = {pyright = {disableOrganizeImports = true}, python = {analysis = {ignore = {"*"}, typeCheckingMode = "off", reportUndefinedVariable = "none"}}}}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}}
+local group_names = {attach = "hjk-attach", detach = "hjk-detach", highlight = "hjk-highlight"}
 local function bmap(buffer, keys0, func, desc)
   return map("n", keys0, func, {desc = ("LSP: " .. desc), buffer = buffer})
 end
 local function tsb(name)
   return (require("telescope.builtin"))[name]
+end
+local function augroup(name, _3fopts)
+  return vim.api.nvim_create_augroup(name, merge({clear = false}, (_3fopts or {})))
+end
+local function autocmd(events, _3fopts)
+  return vim.api.nvim_create_autocmd(events, (_3fopts or {}))
 end
 local function on_attach(event)
   do
@@ -47,42 +55,50 @@ local function on_attach(event)
   end
   can_highlight_3f = (client and _5_())
   if can_highlight_3f then
-    local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", {clear = false})
-    local create_autocmd
-    local function _9_(events, group, callback, buffer_3f)
-      return vim.api.nvim_create_autocmd(events, {group = group, callback = callback, buffer = buffer_3f})
-    end
-    create_autocmd = _9_
-    create_autocmd({"CursorHold", "CursorHoldI"}, highlight_augroup, vim.lsp.buf.document_highlight, event.buf)
-    create_autocmd({"CursorMoved", "CursorMovedI"}, highlight_augroup, vim.lsp.buf.clear_references, event.buf)
-    local function _10_(e)
+    local highlight_augroup = augroup(group_names.highlight)
+    autocmd({"CursorHold", "CursorHoldI"}, {buffer = event.buf, group = highlight_augroup, callback = vim.lsp.buf.document_highlight})
+    autocmd({"CursorMoved", "CursorMovedI"}, {buffer = event.buf, group = highlight_augroup, callback = vim.lsp.buf.clear_references})
+    local function _9_(other_event)
       vim.lsp.buf.clear_references()
-      return vim.api.nvim_clear_autocmds({group = "lsp-highlight", buffer = e.buf})
+      return vim.api.nvim_clear_autocmds({group = group_names.highlight, buffer = other_event.buf})
     end
-    return create_autocmd("LspDetach", vim.api.nvim_create_augroup("lsp-detatch", {clear = true}), _10_, event.buf)
+    return autocmd("LspDetach", {group = augroup(group_names.detach), callback = _9_})
   else
     return nil
   end
 end
-local function config()
-  vim.api.nvim_create_autocmd("LspAttach", {group = vim.api.nvim_create_augroup("lsp-attach", {clear = true}), callback = on_attach})
+local function setup_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   local cmp = require("cmp_nvim_lsp")
   local capabilities0 = vim.tbl_deep_extend("force", capabilities, cmp.default_capabilities())
-  local servers = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}}
   local mason = require("mason")
   local _ = mason.setup()
+  local servers = server_settings
   local ensure_installed = keys((servers or {}))
   local tool_installer = require("mason-tool-installer")
   local mason_lspconfig = require("mason-lspconfig")
   tool_installer.setup({ensure_installed = ensure_installed})
-  local function _12_(server_name)
-    local server = (servers[server_name] or {})
+  local function _11_(server_name)
+    local server
+    local function _12_()
+      local t_13_ = servers
+      if (nil ~= t_13_) then
+        t_13_ = (t_13_)[server_name]
+      else
+      end
+      return t_13_
+    end
+    server = (_12_() or {})
     local server_capabilities = vim.tbl_deep_extend("force", {}, capabilities0, (server.capabilities or {}))
     local lspconfig = require("lspconfig")
     local lspserver = lspconfig[server_name]
+    server.capabilities = server_capabilities
     return lspserver.setup(server)
   end
-  return mason_lspconfig.setup({handlers = {_12_}})
+  return mason_lspconfig.setup({handlers = {_11_}})
+end
+local function config()
+  autocmd("LspAttach", {group = augroup(group_names.attach), callback = on_attach})
+  return setup_capabilities()
 end
 return plugin("neovim/nvim-lspconfig", {dependencies = {plugin("williamboman/mason.nvim", {config = true}), "williamboman/mason-lspconfig.nvim", "WhoIsSethDaniel/mason-tool-installer.nvim", setup_plugin("j-hui/fidget.nvim"), setup_plugin("folke/neodev.nvim")}, config = config})
