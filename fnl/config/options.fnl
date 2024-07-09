@@ -41,13 +41,16 @@
                 :splitbelow true
                 :wrap false
                 :pumblend 10
+                ;; Popups
                 ; Popup blend
                 :pumheight 10
                 ; Max number of entries
                 :confirm true
+                ;; Tab behaviour
                 :tabstop 2
                 :shiftwidth 2
                 :softtabstop 2
+                :expandtab true
                 :list true
                 :listchars "tab:» ,trail:·,nbsp:␣"})
 

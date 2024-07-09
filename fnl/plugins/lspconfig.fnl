@@ -1,6 +1,10 @@
 (local {: plugin : setup-plugin : keys : merge} (require :utils))
 (local {: map } (require :keymap))
 
+; Setup and configure options for lsp clients 
+;
+; See more here
+; https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.m
 (local server-settings 
 			 {
           :lua_ls {
