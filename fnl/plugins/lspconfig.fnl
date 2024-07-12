@@ -17,20 +17,20 @@
             }
           }
           :ruff {}
-					:pyright {
-						:settings {
-							:pyright {
-								:disableOrganizeImports true ;using ruff
-							}
-							:python {
-								:analysis {
-									:ignore ["*"] ; Using Ruff
-									:typeCheckingMode :off ; -- Using Ruff
-									:reportUndefinedVariable "none"
-								}
-							}
-						}
-					}
+					;:pyright {
+					;	:settings {
+					;		:pyright {
+					;			:disableOrganizeImports true ;using ruff
+					;		}
+					;		:python {
+					;			:analysis {
+					;				:ignore ["*"] ; Using Ruff
+					;				:typeCheckingMode :off ; -- Using Ruff
+					;				:reportUndefinedVariable "none"
+					;			}
+					;		}
+					;	}
+					;}
           :tsserver {}
           :tailwindcss {}
           :fennel_language_server {}
