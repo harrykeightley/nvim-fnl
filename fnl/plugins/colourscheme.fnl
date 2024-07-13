@@ -12,14 +12,14 @@
         (plugin :catppuccin/nvim {:name :catppuccin})])
 
 ;; NOTE: Set theme index and config callback here
-(let [theme-index 2
+(let [theme-index 1
       theme (. colour-themes theme-index)
       ;config #(vim.cmd "colorscheme catppuccin-latte")]
-      ;config #(vim.cmd "colorscheme nightfox")]
-      ;config #(vim.cmd "colorscheme dayfox")]
-      ;config #(vim.cmd "colorscheme dawnfox")]
-      ;config #(vim.cmd "colorscheme rose-pine")]
-      ;config #(vim.cmd "colorscheme rose-pine-dawn")]
-  config #(vim.cmd "colorscheme melange")]
+      config #(vim.cmd "colorscheme nightfox")]
+  ;config #(vim.cmd "colorscheme dayfox")]
+  ;config #(vim.cmd "colorscheme dawnfox")]
+  ;config #(vim.cmd "colorscheme rose-pine")]
+  ;config #(vim.cmd "colorscheme rose-pine-dawn")]
+  ;config #(vim.cmd "colorscheme melange")]
   (force-load! theme config)
   colour-themes)
