@@ -17,4 +17,14 @@ map({"i", "n"}, "<esc>", "<cmd>noh<cr><esc>", {desc = "Escape and Clear hlsearch
 map("n", "<leader>dk", vim.diagnostic.goto_prev, {desc = "[D]iagnostics previous"})
 map("n", "<leader>dj", vim.diagnostic.goto_next, {desc = "[D]iagnostics next"})
 map("n", "<leader>dl", vim.diagnostic.open_float, {desc = "[D]iagnostics line"})
+local _local_3_ = require("nfnl.module")
+local autoload = _local_3_["autoload"]
+local core = autoload("nfnl.core")
+local function vim_opt(option, value)
+  return core.assoc(vim.o, option, value)
+end
+local function _4_()
+  return vim_opt("expandtab", not vim.o.expandtab)
+end
+map("n", "<leader>tt", _4_, {desc = "[T]oggle [T]abs as spaces"})
 return {}

@@ -12,7 +12,7 @@
                                 (conform.format {:async true
                                                  :lsp_fallback true}))
                              {:mode "" :desc "[F]ormat buffer"})]
-         :opts {:notify_on_error false
+         :opts {:notify_on_error true
                 ;:format_on_save (fn [bufnr]
                 ;                  {:timeout_ms 500
                 ;                   :lsp_fallback (should-save? (. vim.bo bufnr :filetype))})
@@ -20,4 +20,5 @@
                                    :fennel [:fnlfmt]
                                    :python [:ruff_format]
                                    :javascript [:prettierd :prettier :eslint_d]
-                                   :typescriptreact [:prettierd :eslint_d]}}})
+                                   :typescriptreact [:prettierd :eslint_d]
+                                   :gdscript [:gdformat]}}})

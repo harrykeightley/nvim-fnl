@@ -4,9 +4,11 @@ local plugin = _local_1_["plugin"]
 local setup_plugin = _local_1_["setup-plugin"]
 local keys = _local_1_["keys"]
 local merge = _local_1_["merge"]
+local filter_keys = _local_1_["filter-keys"]
 local _local_2_ = require("keymap")
 local map = _local_2_["map"]
-local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}}
+local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}, gdscript = {}}
+local mason_managed_lsps = {"lua_ls", "ruff", "tsserver", "tailwindcss", "fennel_language_server"}
 local group_names = {attach = "hjk-attach", detach = "hjk-detach", highlight = "hjk-highlight"}
 local function bmap(buffer, keys0, func, desc)
   return map("n", keys0, func, {desc = ("LSP: " .. desc), buffer = buffer})
@@ -67,14 +69,21 @@ local function on_attach(event)
     return nil
   end
 end
-local function setup_capabilities()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
+local function setup_server(lsp_name, options)
+  local lspconfig = require("lspconfig")
+  local server = lspconfig[lsp_name]
+  return server.setup(options)
+end
+local function base_capabilities()
   local cmp = require("cmp_nvim_lsp")
-  local capabilities0 = vim.tbl_deep_extend("force", capabilities, cmp.default_capabilities())
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  return vim.tbl_deep_extend("force", capabilities, cmp.default_capabilities())
+end
+local function setup_mason_lsps()
   local mason = require("mason")
   local _ = mason.setup()
   local servers = server_settings
-  local ensure_installed = keys((servers or {}))
+  local ensure_installed = mason_managed_lsps
   local tool_installer = require("mason-tool-installer")
   local mason_lspconfig = require("mason-lspconfig")
   tool_installer.setup({ensure_installed = ensure_installed})
@@ -89,7 +98,7 @@ local function setup_capabilities()
       return t_13_
     end
     server = (_12_() or {})
-    local server_capabilities = vim.tbl_deep_extend("force", {}, capabilities0, (server.capabilities or {}))
+    local server_capabilities = vim.tbl_deep_extend("force", {}, base_capabilities(), (server.capabilities or {}))
     local lspconfig = require("lspconfig")
     local lspserver = lspconfig[server_name]
     server.capabilities = server_capabilities
@@ -97,8 +106,18 @@ local function setup_capabilities()
   end
   return mason_lspconfig.setup({handlers = {_11_}})
 end
+local function setup_nonmason_lsps()
+  local servers = filter_keys(server_settings, mason_managed_lsps)
+  local capabilities = base_capabilities()
+  for name, options in pairs(servers) do
+    local server_capabilities = vim.tbl_deep_extend("force", {}, capabilities, (options.capabilities or {}))
+    setup_server(name, merge(options, {capabilities = server_capabilities}))
+  end
+  return nil
+end
 local function config()
   autocmd("LspAttach", {group = augroup(group_names.attach), callback = on_attach})
-  return setup_capabilities()
+  setup_mason_lsps()
+  return setup_nonmason_lsps()
 end
 return plugin("neovim/nvim-lspconfig", {dependencies = {plugin("williamboman/mason.nvim", {config = true}), "williamboman/mason-lspconfig.nvim", "WhoIsSethDaniel/mason-tool-installer.nvim", setup_plugin("j-hui/fidget.nvim"), setup_plugin("folke/neodev.nvim")}, config = config})

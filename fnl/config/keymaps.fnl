@@ -28,4 +28,14 @@
 (map :n :<leader>dj vim.diagnostic.goto_next  { :desc "[D]iagnostics next" })
 (map :n :<leader>dl vim.diagnostic.open_float  { :desc "[D]iagnostics line" })
 
+
+(local {: autoload} (require :nfnl.module))
+(local core (autoload :nfnl.core))
+
+(fn vim-opt [option value]
+  (core.assoc vim.o option value))
+
+;; Toggle tabs as spaces
+(map :n :<leader>tt #(vim-opt :expandtab (not vim.o.expandtab)) { :desc "[T]oggle [T]abs as spaces" })
+
 {}
