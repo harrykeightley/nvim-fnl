@@ -7,6 +7,16 @@
 ; https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.m
 (local server-settings {:lua_ls {:settings {:Lua {:completion {:callSnippet :Replace}}}}
                         :ruff {}
+                        ;:ruff_lsp {:init-options {:settings {:args {}}}}
+                        :pyright {:settings {:pyright {:disableOrganizeImports true
+                                                       ;; Using Ruff
+                                                       }
+                                             ;:python {:analysis {:ignore ["*"]
+                                             ;                    ;; Using Ruff
+                                             ;                    :typeCheckingMode :off
+                                             ;                    ;; Using mypy
+                                             ;                    }}
+                                             }}
                         :tsserver {}
                         :tailwindcss {}
                         :fennel_language_server {}
@@ -14,7 +24,7 @@
 
 
 
-(local mason-managed-lsps [:lua_ls :ruff :tsserver :tailwindcss :fennel_language_server])
+(local mason-managed-lsps [:lua_ls :tsserver :tailwindcss :fennel_language_server])
 
 ;; Group names used in vim augroups
 (local group-names {:attach :hjk-attach

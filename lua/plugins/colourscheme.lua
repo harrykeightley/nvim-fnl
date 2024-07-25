@@ -7,11 +7,11 @@ local function force_load_21(plugin0, config_callback)
   return plugin0
 end
 local colour_themes = {plugin("EdenEast/nightfox.nvim", {dependencies = {"nvim-tree/nvim-web-devicons"}}), plugin("savq/melange-nvim"), plugin("rose-pine/neovim"), plugin("catppuccin/nvim", {name = "catppuccin"})}
-local theme_index = 1
+local theme_index = 2
 local theme = colour_themes[theme_index]
 local config
 local function _2_()
-  return vim.cmd("colorscheme nightfox")
+  return vim.cmd("colorscheme rose-pine")
 end
 config = _2_
 force_load_21(theme, config)

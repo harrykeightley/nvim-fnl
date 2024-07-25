@@ -7,8 +7,8 @@ local merge = _local_1_["merge"]
 local filter_keys = _local_1_["filter-keys"]
 local _local_2_ = require("keymap")
 local map = _local_2_["map"]
-local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}, gdscript = {}}
-local mason_managed_lsps = {"lua_ls", "ruff", "tsserver", "tailwindcss", "fennel_language_server"}
+local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, pyright = {settings = {pyright = {disableOrganizeImports = true}}}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}, gdscript = {}}
+local mason_managed_lsps = {"lua_ls", "tsserver", "tailwindcss", "fennel_language_server"}
 local group_names = {attach = "hjk-attach", detach = "hjk-detach", highlight = "hjk-highlight"}
 local function bmap(buffer, keys0, func, desc)
   return map("n", keys0, func, {desc = ("LSP: " .. desc), buffer = buffer})
