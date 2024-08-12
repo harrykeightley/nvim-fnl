@@ -25,7 +25,9 @@
                                    "Search for files in the current directory")
                  (telescope-keymap :g :live_grep)
                  (telescope-keymap :b :buffers)
-                 (telescope-keymap :h :help_tags))
+                 (telescope-keymap :h :help_tags)
+                 (telescope-keymap :c :colorscheme)
+                 (telescope-keymap :d :diagnostics))
          :config (fn []
                    (let [telescope (require :telescope)
                          themes (require :telescope.themes)]

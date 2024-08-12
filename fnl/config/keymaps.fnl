@@ -1,5 +1,6 @@
 (local {: merge} (require :utils))
 (local {: map} (require :keymap))
+(local {: jump-by-severity} (require :config.diagnostics))
 
 ;; Copy from lazyvim 
 
@@ -26,8 +27,8 @@
 (map [:i :n] :<esc> :<cmd>noh<cr><esc> {:desc "Escape and Clear hlsearch"})
 
 ;; Diagnostics
-(map :n :<leader>dk vim.diagnostic.goto_prev {:desc "[D]iagnostics previous"})
-(map :n :<leader>dj vim.diagnostic.goto_next {:desc "[D]iagnostics next"})
+(map :n :<leader>dk #(jump-by-severity -1) {:desc "[D]iagnostics previous"})
+(map :n :<leader>dj #(jump-by-severity 1) {:desc "[D]iagnostics next"})
 (map :n :<leader>dl vim.diagnostic.open_float {:desc "[D]iagnostics line"})
 
 (local {: autoload} (require :nfnl.module))

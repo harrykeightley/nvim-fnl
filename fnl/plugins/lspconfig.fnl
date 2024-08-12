@@ -51,6 +51,9 @@
         tool-installer (require :mason-tool-installer)
         mason-lspconfig (require :mason-lspconfig)]
     (tool-installer.setup {:ensure_installed mason-ensure-installed})
+    ;; NOTE: When I want to edit settings for specific servers, I should do it
+    ;; here in the handlers for the mason-lspconfig...
+    ;; see https://lsp-zero.netlify.app/v4.x/language-server-configuration
     (mason-lspconfig.setup {:handlers [(fn [server-name]
                                          (let [server (or (. servers
                                                              server-name)
