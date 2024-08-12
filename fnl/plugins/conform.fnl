@@ -19,6 +19,7 @@
                 :formatters_by_ft {:lua [:stylua]
                                    :fennel [:fnlfmt]
                                    :python [:ruff_format]
+                                   :typescript [:prettierd :prettier :eslint_d]
                                    :javascript [:prettierd :prettier :eslint_d]
                                    :typescriptreact [:prettierd :eslint_d]
                                    :gdscript [:gdformat]}}})
