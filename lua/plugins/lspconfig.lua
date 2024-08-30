@@ -8,12 +8,11 @@ local filter_keys = _local_1_["filter-keys"]
 local _local_2_ = require("keymap")
 local map = _local_2_["map"]
 local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, ruff = {}, pyright = {settings = {pyright = {disableOrganizeImports = true}}}, tsserver = {}, tailwindcss = {}, fennel_language_server = {}, gdscript = {}}
-local mason_ensure_installed = {"lua_ls", "tailwindcss", "fennel_language_server", "tsserver"}
 local function bmap(buffer, keys0, func, desc)
   return map("n", keys0, func, {desc = ("LSP: " .. desc), buffer = buffer})
 end
 local function tsb(name)
-  return (require("telescope.builtin"))[name]
+  return require("telescope.builtin")[name]
 end
 local function lsp_attach(client, bufnr)
   local bmap0
@@ -35,31 +34,20 @@ local function base_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   return vim.tbl_deep_extend("force", capabilities, cmp.default_capabilities())
 end
-local function setup_mason_lsps()
-  local mason = require("mason")
-  local _ = mason.setup()
-  local servers = server_settings
-  local tool_installer = require("mason-tool-installer")
-  local mason_lspconfig = require("mason-lspconfig")
-  tool_installer.setup({ensure_installed = mason_ensure_installed})
-  local function _4_(server_name)
-    local server = (servers[server_name] or {})
-    local server_capabilities = vim.tbl_deep_extend("force", {}, base_capabilities(), (server.capabilities or {}))
-    local lspconfig = require("lspconfig")
-    local lspserver = lspconfig[server_name]
-    server["capabilities"] = server_capabilities
-    return lspserver.setup(server)
-  end
-  return mason_lspconfig.setup({handlers = {_4_}})
-end
 local function setup_server(lsp_name, options)
   local lspconfig = require("lspconfig")
   local server = lspconfig[lsp_name]
   return server.setup(options)
 end
+local function setup_lsps()
+  for lsp_name, options in pairs(server_settings) do
+    setup_server(lsp_name, options)
+  end
+  return nil
+end
 local function config()
   local lsp_zero = require("lsp-zero")
   lsp_zero.extend_lspconfig({sign_text = true, lsp_attach = lsp_attach, capabilities = base_capabilities()})
-  return setup_mason_lsps()
+  return setup_lsps()
 end
 return plugin("VonHeikemen/lsp-zero.nvim", {dependencies = {plugin("neovim/nvim-lspconfig"), plugin("williamboman/mason.nvim", {config = true}), plugin("williamboman/mason-lspconfig.nvim"), plugin("WhoIsSethDaniel/mason-tool-installer.nvim"), setup_plugin("j-hui/fidget.nvim"), setup_plugin("folke/neodev.nvim")}, config = config})

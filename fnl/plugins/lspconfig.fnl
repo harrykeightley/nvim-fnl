@@ -11,14 +11,8 @@
                         :tsserver {}
                         :tailwindcss {}
                         :fennel_language_server {}
-                        :gdscript {}})
-
-;; You can add other tools here that you want Mason to install
-;; for you, so that they are available from within Neovim.
-(local mason-ensure-installed [:lua_ls
-                               :tailwindcss
-                               :fennel_language_server
-                               :tsserver])
+                        :gdscript {}
+                        })
 
 (fn bmap [buffer keys func desc]
   (map :n keys func {:desc (.. "LSP: " desc) : buffer}))
@@ -43,44 +37,21 @@
         capabilities (vim.lsp.protocol.make_client_capabilities)]
     (vim.tbl_deep_extend :force capabilities (cmp.default_capabilities))))
 
-(fn setup-mason-lsps []
-  (let [;; Require mason to be setup
-        mason (require :mason)
-        _ (mason.setup)
-        servers server-settings
-        tool-installer (require :mason-tool-installer)
-        mason-lspconfig (require :mason-lspconfig)]
-    (tool-installer.setup {:ensure_installed mason-ensure-installed})
-    ;; NOTE: When I want to edit settings for specific servers, I should do it
-    ;; here in the handlers for the mason-lspconfig...
-    ;; see https://lsp-zero.netlify.app/v4.x/language-server-configuration
-    (mason-lspconfig.setup {:handlers [(fn [server-name]
-                                         (let [server (or (. servers
-                                                             server-name)
-                                                          {})
-                                               server-capabilities (vim.tbl_deep_extend :force
-                                                                                        {}
-                                                                                        (base-capabilities)
-                                                                                        (or server.capabilities
-                                                                                            {}))
-                                               lspconfig (require :lspconfig)
-                                               lspserver (. lspconfig
-                                                            server-name)]
-                                           (tset server :capabilities
-                                                 server-capabilities)
-                                           (lspserver.setup server)))]})))
-
 (fn setup-server [lsp-name options]
   (let [lspconfig (require :lspconfig)
         server (. lspconfig lsp-name)]
     (server.setup options)))
+
+(fn setup-lsps [] 
+  (each [lsp-name options (pairs server-settings)]
+    (setup-server lsp-name options)))
 
 (fn config []
   (let [lsp-zero (require :lsp-zero)]
     (lsp-zero.extend_lspconfig {:sign_text true
                                 :lsp_attach lsp-attach
                                 :capabilities (base-capabilities)})
-    (setup-mason-lsps)))
+    (setup-lsps)))
 
 (plugin :VonHeikemen/lsp-zero.nvim
         {:dependencies [(plugin :neovim/nvim-lspconfig)
