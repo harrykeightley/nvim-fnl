@@ -2,10 +2,12 @@
 local _local_1_ = require("utils")
 local plugin = _local_1_["plugin"]
 local notify = _local_1_["notify"]
+local function which_binding(keys, _3fopts)
+  return plugin(keys, _3fopts)
+end
 local function config(...)
   local wk = require("which-key")
   wk.setup()
-  wk.register({c = {name = "[C]ode+"}, d = {name = "[D]iagnostics+"}, r = {name = "[R]ename+"}, s = {name = "[S]earch+"}, t = {name = "[T]oggle+"}, h = {name = "Git [H]unk+"}}, {prefix = "<leader>"})
-  return wk.register({["<leader>h"] = {"Git [H]unk"}}, {mode = "v"})
+  return wk.add({which_binding("<leader>c", {group = "[C]ode+"}), which_binding("<leader>d", {group = "[D]iagnostics+"}), which_binding("<leader>r", {group = "[R]ename+"}), which_binding("<leader>s", {group = "[S]earch+"}), which_binding("<leader>t", {group = "[T]oggle+"})})
 end
 return plugin("folke/which-key.nvim", {event = "VimEnter", config = config})

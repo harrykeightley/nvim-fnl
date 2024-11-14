@@ -8,7 +8,7 @@
 (local server-settings {:lua_ls {:settings {:Lua {:completion {:callSnippet :Replace}}}}
                         :ruff {}
                         :pyright {:settings {:pyright {:disableOrganizeImports true}}}
-                        :tsserver {}
+                        :ts_ls {}
                         :tailwindcss {}
                         :fennel_language_server {}
                         :gdscript {}
