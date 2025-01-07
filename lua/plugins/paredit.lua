@@ -5,8 +5,4 @@ local function _2_()
   local paredit = require("nvim-paredit")
   return paredit.setup()
 end
-local function _3_()
-  local paredit_fnl = require("nvim-paredit-fennel")
-  return paredit_fnl.setup()
-end
-return {plugin("julienvincent/nvim-paredit", {lazy = true, ft = {"clojure", "fennel"}, config = _2_}), plugin("julienvincent/nvim-paredit-fennel", {dependencies = {"julienvincent/nvim-paredit"}, lazy = true, ft = {"fennel"}, config = _3_})}
+return plugin("julienvincent/nvim-paredit", {lazy = true, ft = {"clojure", "fennel"}, config = _2_})

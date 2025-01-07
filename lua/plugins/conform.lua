@@ -8,7 +8,7 @@ local function should_save_3f(filetype)
   do
     local t_2_ = disabled_filetypes
     if (nil ~= t_2_) then
-      t_2_ = (t_2_)[filetype]
+      t_2_ = t_2_[filetype]
     else
     end
     _3_ = t_2_

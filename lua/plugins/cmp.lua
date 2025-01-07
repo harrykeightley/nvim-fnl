@@ -1,8 +1,8 @@
 -- [nfnl] Compiled from fnl/plugins/cmp.fnl by https://github.com/Olical/nfnl, do not edit.
 local _local_1_ = require("utils")
 local plugin = _local_1_["plugin"]
-local cmp_sources = {{name = "nvim_lsp"}, {name = "luasnip"}, {name = "buffer"}}
-local dependencies = {"hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-path", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip"}
+local cmp_sources = {{name = "nvim_lsp"}, {name = "luasnip"}, {name = "conjure"}, {name = "buffer"}}
+local dependencies = {"hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-path", "PaterJason/cmp-conjure", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip"}
 local snippets_paths = {"~/.config/nvim/snippets"}
 local function config()
   local cmp = require("cmp")

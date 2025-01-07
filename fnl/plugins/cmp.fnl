@@ -2,10 +2,12 @@
 
 (local cmp-sources [{:name :nvim_lsp}
                     {:name :luasnip}
+                    {:name :conjure}
                     {:name :buffer :name :buffer}])
 
 (local dependencies [:hrsh7th/cmp-nvim-lsp
                      :hrsh7th/cmp-path
+                     :PaterJason/cmp-conjure
                      ;; luasnip
                      :L3MON4D3/LuaSnip
                      :saadparwaiz1/cmp_luasnip])

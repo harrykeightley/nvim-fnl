@@ -19,7 +19,8 @@
   :lua 
   :markdown 
   :yaml
-  :python])
+  :python
+  :latex])
 
 (plugin :nvim-treesitter/nvim-treesitter
   {:build ":TSUpdate"

@@ -17,6 +17,7 @@
                 ;                  {:timeout_ms 500
                 ;                   :lsp_fallback (should-save? (. vim.bo bufnr :filetype))})
                 :formatters_by_ft {:lua [:stylua]
+                                   ;:lua [:lua-format]
                                    :fennel [:fnlfmt]
                                    :python [:ruff_format]
                                    :typescript [:prettierd :prettier :eslint_d]

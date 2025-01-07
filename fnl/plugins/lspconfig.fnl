@@ -12,7 +12,7 @@
                         :tailwindcss {}
                         :fennel_language_server {}
                         :gdscript {}
-                        })
+                        :texlab {} })
 
 (fn bmap [buffer keys func desc]
   (map :n keys func {:desc (.. "LSP: " desc) : buffer}))
