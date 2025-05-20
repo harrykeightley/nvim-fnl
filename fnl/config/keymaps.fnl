@@ -7,8 +7,10 @@
 ;; Better UP/Down
 (map [:n :x] :j "v:count == 0 ? 'gj' : 'j'"
      {:desc :Down :expr true :silent true})
+
 (map [:n :x] :<Down> "v:count == 0 ? 'gj' : 'j'"
      {:desc :Down :expr true :silent true})
+
 (map [:n :x] :k "v:count == 0 ? 'gk' : 'k'" {:desc :Up :expr true :silent true})
 (map [:n :x] :<Up> "v:count == 0 ? 'gk' : 'k'"
      {:desc :Up :expr true :silent true})
@@ -20,11 +22,18 @@
 ;(map :n :<C-l> :<C-w>l {:desc "Go to Right Window" :remap true})
 
 ;; Move between buffers
-(map :n :<S-h> :<cmd>bprevious<cr> {:desc "Prev Buffer"})
-(map :n :<S-l> :<cmd>bnext<cr> {:desc "Next Buffer"})
+;; NOTE: Disabled because annoying
+;(map :n :<S-h> :<cmd>bprevious<cr> {:desc "Prev Buffer"})
+;(map :n :<S-l> :<cmd>bnext<cr> {:desc "Next Buffer"})
 
 ;; Clear search with <esc>
 (map [:i :n] :<esc> :<cmd>noh<cr><esc> {:desc "Escape and Clear hlsearch"})
+
+;; Tabbing
+(map [:n] :<Tab> ">>")
+(map [:n] :<S-Tab> "<<")
+(map [:v] :<Tab> ">gv")
+(map [:v] :<S-Tab> "<gv")
 
 ;; Diagnostics
 (map :n :<leader>dk #(jump-by-severity -1) {:desc "[D]iagnostics previous"})

@@ -16,11 +16,16 @@
                 ;:format_on_save (fn [bufnr]
                 ;                  {:timeout_ms 500
                 ;                   :lsp_fallback (should-save? (. vim.bo bufnr :filetype))})
+                :formatters {:gdformat {:prepend_args [:--use-spaces=2
+                                                       :--line-length=80]}}
                 :formatters_by_ft {:lua [:stylua]
                                    ;:lua [:lua-format]
+                                   :rust [:rustfmt]
                                    :fennel [:fnlfmt]
                                    :python [:ruff_format]
                                    :typescript [:prettierd :prettier :eslint_d]
                                    :javascript [:prettierd :prettier :eslint_d]
+                                   :json [:jq]
                                    :typescriptreact [:prettierd :eslint_d]
+                                   :html [:prettierd]
                                    :gdscript [:gdformat]}}})

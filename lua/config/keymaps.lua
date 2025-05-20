@@ -9,9 +9,11 @@ map({"n", "x"}, "j", "v:count == 0 ? 'gj' : 'j'", {desc = "Down", expr = true, s
 map({"n", "x"}, "<Down>", "v:count == 0 ? 'gj' : 'j'", {desc = "Down", expr = true, silent = true})
 map({"n", "x"}, "k", "v:count == 0 ? 'gk' : 'k'", {desc = "Up", expr = true, silent = true})
 map({"n", "x"}, "<Up>", "v:count == 0 ? 'gk' : 'k'", {desc = "Up", expr = true, silent = true})
-map("n", "<S-h>", "<cmd>bprevious<cr>", {desc = "Prev Buffer"})
-map("n", "<S-l>", "<cmd>bnext<cr>", {desc = "Next Buffer"})
 map({"i", "n"}, "<esc>", "<cmd>noh<cr><esc>", {desc = "Escape and Clear hlsearch"})
+map({"n"}, "<Tab>", ">>")
+map({"n"}, "<S-Tab>", "<<")
+map({"v"}, "<Tab>", ">gv")
+map({"v"}, "<S-Tab>", "<gv")
 local function _4_()
   return jump_by_severity(-1)
 end

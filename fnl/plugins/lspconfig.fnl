@@ -4,7 +4,7 @@
 ; Setup and configure options for lsp clients 
 ;
 ; See more here
-; https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+; https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 (local server-settings {:lua_ls {:settings {:Lua {:completion {:callSnippet :Replace}}}}
                         :ruff {}
                         :pyright {:settings {:pyright {:disableOrganizeImports true}}}
@@ -12,7 +12,9 @@
                         :tailwindcss {}
                         :fennel_language_server {}
                         :gdscript {}
-                        :texlab {} })
+                        :texlab {}
+                        :astro {}
+                        :rust_analyzer {}})
 
 (fn bmap [buffer keys func desc]
   (map :n keys func {:desc (.. "LSP: " desc) : buffer}))
@@ -42,7 +44,7 @@
         server (. lspconfig lsp-name)]
     (server.setup options)))
 
-(fn setup-lsps [] 
+(fn setup-lsps []
   (each [lsp-name options (pairs server-settings)]
     (setup-server lsp-name options)))
 

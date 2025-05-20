@@ -1,4 +1,5 @@
 (local {: plugin} (require :utils))
+(local {: nmap : map} (require :keymap))
 
 (local cmp-sources [{:name :nvim_lsp}
                     {:name :luasnip}
@@ -14,12 +15,23 @@
 
 (local snippets-paths ["~/.config/nvim/snippets"])
 
+(fn make-snippet-keymaps [luasnip loader]
+  (nmap :<leader>cs (fn [] (loader.load {:paths snippets-paths}))
+        {:desc "Reload snippets"})
+  ;; Use tab and shift tab to go back and forward in snippet components.
+  ;(map [:i :s] :<Tab> ;     (fn [] (if (luasnip.expand_or_jumpable) (luasnip.jump 1) "\t")) ;     {:silent true})
+  ;(map [:i :s] :<S-Tab> ;     (fn [] (if (luasnip.jumpable) (luasnip.jump -1) :<S-Tab>)) {:silent true})
+  ;(map [:i :s] :<C-E> (fn [] ;                      (when (luasnip.choice_active) ;                        (luasnip.change_choice 1)) ;                      {:silent true}))
+  )
+
 (fn config []
   (let [cmp (require :cmp)
         luasnip (require :luasnip)
         snippet-loader (require :luasnip.loaders.from_lua)]
     (luasnip.config.setup)
     (snippet-loader.lazy_load {:paths snippets-paths})
+    ;; Setup reload snippet keybind
+    (make-snippet-keymaps luasnip snippet-loader)
     (cmp.setup {:snippet {:expand (fn [args] (luasnip.lsp_expand args.body))}
                 :completion {:completeopt "menu,menuone,noinsert"}
                 :mapping (cmp.mapping.preset.insert {:<C-n> (cmp.mapping.select_next_item)
