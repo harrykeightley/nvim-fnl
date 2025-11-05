@@ -36,6 +36,14 @@
 (fn plugin [name opts?]
   (merge {1 name} (or opts? {})))
 
+(fn plugin-with-args [name args? opts?]
+  (let [args (or args? [])
+        opts (or opts? {})
+        result (merge {1 name} opts)]
+    (collect [i v (ipairs args) &into result]
+      (+ i 1)
+      v)))
+
 (fn setup-plugin [name]
   (plugin name {:opts {}}))
 
@@ -60,6 +68,7 @@
  : merge
  : keys
  : plugin
+ : plugin-with-args
  : plugin-keys
  : setup-plugin
  : find

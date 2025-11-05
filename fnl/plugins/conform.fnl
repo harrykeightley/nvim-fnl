@@ -5,6 +5,7 @@
 (fn should-save? [filetype]
   (not (?. disabled-filetypes filetype)))
 
+;; https://github.com/stevearc/conform.nvim?tab=readme-ov-file#formatters
 (plugin :stevearc/conform.nvim
         {:lazy false
          :keys [(plugin-keys :<leader>f
@@ -28,4 +29,6 @@
                                    :json [:jq]
                                    :typescriptreact [:prettierd :eslint_d]
                                    :html [:prettierd]
+                                   :htmldjango [:djlint]
+                                   :go [:gofumpt]
                                    :gdscript [:gdformat]}}})

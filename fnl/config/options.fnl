@@ -4,7 +4,9 @@
 (fn vim-opt [option value]
   (core.assoc vim.o option value))
 
-(local options {:number true
+(local options {; Add hybrid relative numbers
+                :number true
+                :relativenumber true
                 :mouse :a
                 :showmode false
                 ; Sync clipboard between OS and Neovim.

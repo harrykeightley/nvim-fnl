@@ -50,4 +50,5 @@
 (map :n :<leader>tt #(vim-opt :expandtab (not vim.o.expandtab))
      {:desc "[T]oggle [T]abs as spaces"})
 
+
 {}

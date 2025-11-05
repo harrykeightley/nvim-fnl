@@ -6,6 +6,7 @@
 ; See more here
 ; https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 (local server-settings {:lua_ls {:settings {:Lua {:completion {:callSnippet :Replace}}}}
+                        :gopls {}
                         :ruff {}
                         :pyright {:settings {:pyright {:disableOrganizeImports true}}}
                         :ts_ls {}
