@@ -13,14 +13,13 @@
     (< 0 (length diagnostics))))
 
 (fn jump-by-severity [count]
-  (let [next-severity (if (has-severity :error) :error
-                          (has-severity :warn) :warn
-                          nil)
-        method (if (< 0 count)
-                   vim.diagnostic.goto_next
-                   vim.diagnostic.goto_prev)]
-    ;; NOTE: Below is for nvim 0.11 when aboveb ecomes deprecated
-    ;(vim.diagnostic.jump {: count :severity (. severities next-severity)})
-    (method {:severity (. severities next-severity)})))
+  "For the current highest severity in the document (of <error, warn>), moves {count}
+  to the next diagnostic"
+  (let [next-highest-severity (if (has-severity :error) :error
+                                  (has-severity :warn) :warn
+                                  nil)]
+    ;; NOTE: Below is for nvim 0.11 when above becomes deprecated
+    (vim.diagnostic.jump {: count
+                          :severity (. severities next-highest-severity)})))
 
 {: jump-by-severity : has-severity}

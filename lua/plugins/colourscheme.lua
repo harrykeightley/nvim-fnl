@@ -1,7 +1,7 @@
--- [nfnl] Compiled from fnl/plugins/colourscheme.fnl by https://github.com/Olical/nfnl, do not edit.
+-- [nfnl] fnl/plugins/colourscheme.fnl
 local _local_1_ = require("utils")
-local plugin = _local_1_["plugin"]
-local merge = _local_1_["merge"]
+local plugin = _local_1_.plugin
+local merge = _local_1_.merge
 local function set_colorscheme_21(name)
   return vim.cmd(("colorscheme " .. name))
 end
@@ -13,12 +13,12 @@ local function set_bg_21(val)
   vim.o.background = val
   return nil
 end
-local colour_themes = {plugin("EdenEast/nightfox.nvim", {dependencies = {"nvim-tree/nvim-web-devicons"}}), plugin("rose-pine/neovim"), plugin("savq/melange-nvim"), plugin("catppuccin/nvim", {name = "catppuccin"}), plugin("zenbones-theme/zenbones.nvim", {dependencies = {"rktjmp/lush.nvim"}}), plugin("rebelot/kanagawa.nvim"), plugin("AlexvZyl/nordic.nvim"), plugin("nyoom-engineering/oxocarbon.nvim"), plugin("aktersnurra/no-clown-fiesta.nvim"), plugin("ramojus/mellifluous.nvim"), plugin("scottmckendry/cyberdream.nvim"), plugin("datsfilipe/vesper.nvim"), plugin("navarasu/onedark.nvim"), plugin("sainnhe/everforest"), plugin("Mofiqul/vscode.nvim"), plugin("sainnhe/gruvbox-material"), plugin("projekt0n/github-nvim-theme"), plugin("ribru17/bamboo.nvim")}
+local theme_plugins = {nightfox = plugin("EdenEast/nightfox.nvim", {dependencies = {"nvim-tree/nvim-web-devicons"}}), ["rose-pine"] = plugin("rose-pine/neovim"), melange = plugin("savq/melange-nvim"), cat = plugin("catppuccin/nvim", {name = "catppuccin"}), zenbones = plugin("zenbones-theme/zenbones.nvim", {dependencies = {"rktjmp/lush.nvim"}}), kanagawa = plugin("rebelot/kanagawa.nvim"), nordic = plugin("AlexvZyl/nordic.nvim"), oxocarbon = plugin("nyoom-engineering/oxocarbon.nvim"), ["no-clown"] = plugin("aktersnurra/no-clown-fiesta.nvim"), mellifluous = plugin("ramojus/mellifluous.nvim"), cyberdream = plugin("scottmckendry/cyberdream.nvim"), vesper = plugin("datsfilipe/vesper.nvim"), onedark = plugin("navarasu/onedark.nvim"), everforest = plugin("sainnhe/everforest"), vscode = plugin("Mofiqul/vscode.nvim"), gruvbox = plugin("sainnhe/gruvbox-material"), github = plugin("projekt0n/github-nvim-theme"), bamboo = plugin("ribru17/bamboo.nvim")}
 local theme_options = {["no-clown-fiesta"] = {styles = {lsp = {undercurl = true}, match_paren = {underline = true}}}, mellifluous = {}}
-local function build_preset(theme_index, colorscheme, _3fopts)
+local function build_preset(theme_index_name, colorscheme, _3fopts)
   local opts = (_3fopts or {})
   local bg = (opts.bg or "dark")
-  local theme = colour_themes[theme_index]
+  local theme = theme_plugins[theme_index_name]
   local settings = theme_options[colorscheme]
   local config
   local or_2_ = opts.config
@@ -38,7 +38,7 @@ local function build_preset(theme_index, colorscheme, _3fopts)
   config = or_2_
   return {theme, config}
 end
-local theme_presets = {nightfox = build_preset(1, "nightfox"), terafox = build_preset(1, "terafox"), dayfox = build_preset(1, "dayfox"), dawnfox = build_preset(1, "dawnfox"), ["rose-pine"] = build_preset(2, "rose-pine"), ["rose-pine-dawn"] = build_preset(2, "rose-pine-dawn"), melange = build_preset(3, "melange"), ["melange-light"] = build_preset(3, "melange", {bg = "light"}), catppuccin = build_preset(4, "catppuccin"), ["catppuccin-latte"] = build_preset(4, "catppuccin-latte"), zenbones = build_preset(5, "zenbones"), ["zenbones-light"] = build_preset(5, "zenbones-light", {bg = "light"}), ["kanagawa-wave"] = build_preset(6, "kanagawa-wave"), ["kanagawa-dragon"] = build_preset(6, "kanagawa-dragon"), ["kanagawa-lotus"] = build_preset(6, "kanagawa-lotus"), nordic = build_preset(7, "nordic"), oxocarbon = build_preset(8, "oxocarbon"), ["oxocarbon-light"] = build_preset(8, "oxocarbon", "light"), ["no-clown-fiesta"] = build_preset(9, "no-clown-fiesta"), mellifluous = build_preset(10, "mellifluous"), cyberdream = build_preset(11, "cyberdream"), vesper = build_preset(12, "vesper"), ondedark = build_preset(13, "onedark"), everforest = build_preset(14, "everforest"), vscode = build_preset(15, "vscode"), gruvbox = build_preset(16, "gruvbox-material"), github = build_preset(17, "github"), ["github-dark-default"] = build_preset(17, "github_dark_default"), bamboo = build_preset(18, "bamboo")}
+local theme_presets = {nightfox = build_preset("nightfox", "nightfox"), terafox = build_preset("nightfox", "terafox"), dayfox = build_preset("nightfox", "dayfox"), dawnfox = build_preset("nightfox", "dawnfox"), ["rose-pine"] = build_preset("rose-pine", "rose-pine"), ["rose-pine-dawn"] = build_preset("rose-pine", "rose-pine-dawn"), melange = build_preset("melange", "melange"), ["melange-light"] = build_preset("melange", "melange", {bg = "light"}), catppuccin = build_preset("cat", "catppuccin"), ["catppuccin-latte"] = build_preset("cat", "catppuccin-latte"), zenbones = build_preset("zenbones", "zenbones"), ["zenbones-light"] = build_preset("zenbones", "zenbones-light", {bg = "light"}), ["kanagawa-wave"] = build_preset("kanagawa", "kanagawa-wave"), ["kanagawa-dragon"] = build_preset("kanagawa", "kanagawa-dragon"), ["kanagawa-lotus"] = build_preset("kanagawa", "kanagawa-lotus"), nordic = build_preset("nordic", "nordic"), oxocarbon = build_preset("oxocarbon", "oxocarbon"), ["oxocarbon-light"] = build_preset("oxocarbon", "oxocarbon", "light"), ["no-clown-fiesta"] = build_preset("no-clown", "no-clown-fiesta"), mellifluous = build_preset("mellifluous", "mellifluous"), cyberdream = build_preset("cyberdream", "cyberdream"), vesper = build_preset("vesper", "vesper"), ondedark = build_preset("onedark", "onedark"), everforest = build_preset("everforest", "everforest"), vscode = build_preset("vscode", "vscode"), gruvbox = build_preset("gruvbox", "gruvbox-material"), github = build_preset("github", "github"), ["github-dark-default"] = build_preset("github", "github_dark_default"), bamboo = build_preset("bamboo", "bamboo")}
 local function force_load_21(plugin0, config_callback)
   merge(plugin0, {priority = 1000, config = config_callback, lazy = false})
   return plugin0
@@ -50,4 +50,18 @@ local function load_preset(preset)
   return force_load_21(theme, config)
 end
 load_preset("github-dark-default")
-return colour_themes
+local theme_plugin_values
+do
+  local tbl_26_ = {}
+  local i_27_ = 0
+  for _, v in pairs(theme_plugins) do
+    local val_28_ = v
+    if (nil ~= val_28_) then
+      i_27_ = (i_27_ + 1)
+      tbl_26_[i_27_] = val_28_
+    else
+    end
+  end
+  theme_plugin_values = tbl_26_
+end
+return theme_plugin_values

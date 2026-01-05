@@ -1,6 +1,6 @@
--- [nfnl] Compiled from fnl/config/options.fnl by https://github.com/Olical/nfnl, do not edit.
+-- [nfnl] fnl/config/options.fnl
 local _local_1_ = require("nfnl.module")
-local autoload = _local_1_["autoload"]
+local autoload = _local_1_.autoload
 local core = autoload("nfnl.core")
 local function vim_opt(option, value)
   return core.assoc(vim.o, option, value)

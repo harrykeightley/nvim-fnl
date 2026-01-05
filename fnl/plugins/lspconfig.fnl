@@ -21,6 +21,7 @@
   (map :n keys func {:desc (.. "LSP: " desc) : buffer}))
 
 (fn tsb [name]
+  "Shorthand for referencing a Telescope Builtin function."
   (. (require :telescope.builtin) name))
 
 (fn lsp-attach [client bufnr]
@@ -40,14 +41,10 @@
         capabilities (vim.lsp.protocol.make_client_capabilities)]
     (vim.tbl_deep_extend :force capabilities (cmp.default_capabilities))))
 
-(fn setup-server [lsp-name options]
-  (let [lspconfig (require :lspconfig)
-        server (. lspconfig lsp-name)]
-    (server.setup options)))
-
 (fn setup-lsps []
   (each [lsp-name options (pairs server-settings)]
-    (setup-server lsp-name options)))
+    (vim.lsp.config lsp-name options)
+    (vim.lsp.enable lsp-name)))
 
 (fn config []
   (let [lsp-zero (require :lsp-zero)]

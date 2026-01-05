@@ -1,12 +1,12 @@
--- [nfnl] Compiled from fnl/plugins/lspconfig.fnl by https://github.com/Olical/nfnl, do not edit.
+-- [nfnl] fnl/plugins/lspconfig.fnl
 local _local_1_ = require("utils")
-local plugin = _local_1_["plugin"]
+local plugin = _local_1_.plugin
 local setup_plugin = _local_1_["setup-plugin"]
-local keys = _local_1_["keys"]
-local merge = _local_1_["merge"]
+local keys = _local_1_.keys
+local merge = _local_1_.merge
 local filter_keys = _local_1_["filter-keys"]
 local _local_2_ = require("keymap")
-local map = _local_2_["map"]
+local map = _local_2_.map
 local server_settings = {lua_ls = {settings = {Lua = {completion = {callSnippet = "Replace"}}}}, gopls = {}, ruff = {}, pyright = {settings = {pyright = {disableOrganizeImports = true}}}, ts_ls = {}, tailwindcss = {}, fennel_language_server = {}, gdscript = {}, texlab = {}, astro = {}, rust_analyzer = {}}
 local function bmap(buffer, keys0, func, desc)
   return map("n", keys0, func, {desc = ("LSP: " .. desc), buffer = buffer})
@@ -34,14 +34,10 @@ local function base_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   return vim.tbl_deep_extend("force", capabilities, cmp.default_capabilities())
 end
-local function setup_server(lsp_name, options)
-  local lspconfig = require("lspconfig")
-  local server = lspconfig[lsp_name]
-  return server.setup(options)
-end
 local function setup_lsps()
   for lsp_name, options in pairs(server_settings) do
-    setup_server(lsp_name, options)
+    vim.lsp.config(lsp_name, options)
+    vim.lsp.enable(lsp_name)
   end
   return nil
 end
