@@ -15,7 +15,11 @@
                         :gdscript {}
                         :texlab {}
                         :astro {}
-                        :rust_analyzer {}})
+                        :rust_analyzer {}
+                        :omnisharp {}
+                        :fsautocomplete {}
+                        ;
+                        })
 
 (fn bmap [buffer keys func desc]
   (map :n keys func {:desc (.. "LSP: " desc) : buffer}))
